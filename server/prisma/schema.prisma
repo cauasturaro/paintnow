@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id       Int    @id @default(autoincrement())
+  nickname String @db.VarChar(25)
+
+  roomId Int
+  Room   Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+}
+
+model Room {
+  id Int @id @default(autoincrement())
+
+  players Player[]
+}
