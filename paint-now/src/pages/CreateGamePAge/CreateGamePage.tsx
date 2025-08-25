@@ -1,13 +1,11 @@
 // React
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // Services
-import { playerJoin } from '../../services/UserService';
+import { createRoom } from '../../services/RoomService';
 
-export default function JoinPage() {
-    const { roomId } = useParams<{ roomId: string }>();
-
+export default function CreateGamePage() {
     const navigate = useNavigate();
 
     const [nickname, setNickname] = useState<string>("");
@@ -16,21 +14,20 @@ export default function JoinPage() {
     const onJoin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            if (!roomId) throw new Error('ID de sala inválido');
 
-            const response = await playerJoin(nickname, roomId)
-            console.error('Join response:', response);
+            const roomId = await createRoom(nickname)
+            console.error('Room created:', roomId);
 
             navigate(`/lobby/${roomId}`);
         } catch (error: any) {
-            console.error('Join error:', error);
-            setError(error.message || 'Erro ao tentar entrar no jogo')
+            console.error('Room error:', error);
+            setError(error.message || 'Erro ao tentar criar jogo')
         }
     }
 
     return (
-        <div className='join-page'>
-            <h1>Entre na sala</h1>
+        <div className='create-game-page'>
+            <h1>Criar sala</h1>
             <form onSubmit={onJoin}>
                 <input 
                     type='text'

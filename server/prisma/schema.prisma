@@ -12,12 +12,14 @@ model Player {
   id       Int    @id @default(autoincrement())
   nickname String @db.VarChar(25)
 
-  roomId Int
-  Room   Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId String
+  Room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
 }
 
 model Room {
-  id Int @id @default(autoincrement())
+  id String @id @default(cuid())
+
+  leaderId Int?
 
   players Player[]
 }
